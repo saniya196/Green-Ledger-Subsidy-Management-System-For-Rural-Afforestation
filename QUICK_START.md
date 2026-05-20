@@ -1,103 +1,100 @@
-# 🚀 Quick Start Guide - Enhanced Demo Data
+# Quick Start - Get It Running Fast
 
-## One-Command Setup
+Just want to run this thing? Here's how to get it working in a few minutes.
 
-### Windows Command Prompt
-```batch
-cd src
-javac DatabaseInitializer.java
-java DatabaseInitializer
+## Before You Start
+
+Make sure you have:
+- Java 8 or higher
+- MySQL installed and running
+- MySQL connector in lib/ folder
+
+## Step 1: Database Setup
+
+Open MySQL and run the database_schema.sql file. This creates everything you need (tables + demo data):
+
+```bash
+mysql -u root -p < database_schema.sql
 ```
 
-### Linux/Mac Terminal
+Or just copy-paste the SQL file contents into MySQL Workbench and execute it.
+
+## Step 2: Compile
+
 ```bash
 cd src
-javac DatabaseInitializer.java
-java DatabaseInitializer
+javac -encoding UTF-8 -cp ".:../lib/mysql-connector-java-8.0.33.jar" *.java
 ```
 
-## What Happens
+If you get compilation errors, make sure you're in the `src` folder.
 
-```
-✓ Connects to MySQL database "greenledger"
-✓ Creates tables if they don't exist
-✓ Inserts 150 farmers
-✓ Plants 350+ trees
-✓ Creates 150 subsidy records with varied statuses
-✓ Logs 100+ audit entries
-✓ Displays login credentials
+## Step 3: Run the App
+
+```bash
+java -cp ".:../lib/mysql-connector-java-8.0.33.jar" LoginScreen
 ```
 
-## Login Credentials
+The login window should pop up.
 
-| Role | Username | Password |
-|------|----------|----------|
-| Admin | admin | admin123 |
-| Officer | officer1 | officer123 |
-| Staff | staff1 | staff123 |
+## Step 4: Login
 
-## Demo Data Breakdown
+Use these credentials:
+- Username: `admin`
+- Password: `admin123`
 
-| Entity | Count | Details |
-|--------|-------|---------|
-| Farmers | 150 | 5 villages, varied land sizes |
-| Trees | 350+ | 20 species, 4-9 per farmer |
-| Subsidies | 150 | 6 statuses, ₹40K-₹90K each |
-| Audit Logs | 100+ | 90 days of activity |
-| Villages | 5 | Panchpur, Nandpur, Greenville, Woodland, Forestville |
+That's it! You're in.
 
-## Test Scenarios
+## Demo Accounts
 
-### 1. Search for Farmer
-- Username: `admin` / Password: `admin123`
-- Click "🔍 Search"
-- Enter any farmer name like "Rajesh" or village "Panchpur"
-- See results with tree count and subsidy status
+If you want to test different roles:
+- admin / admin123 (everything)
+- officer1 / officer123 (farmer management)
+- staff1 / staff123 (search only)
 
-### 2. View Subsidy Status
-- Click "📋 View Records"
-- See 150 farmers with subsidy pipeline:
-  - 30 DISBURSED (fully paid)
-  - 30 PARTIALLY_DISBURSED (50-80%)
-  - 30 APPROVED (awaiting payment)
-  - 30 PENDING (under review)
-  - 15 REJECTED (fraud cases)
-  - 15 ON_HOLD (documentation)
+## What to Try
 
-### 3. Audit Trail
-- Click "History" tab
-- See 100+ entries showing:
-  - Who did what
-  - When it happened
-  - Before/after values
-  - User role
+1. **Search Farmer** - Click search, try farmer ID 101 or search by name
+2. **View Trees** - See all the tree records I added as demo data
+3. **Check Subsidy** - Calculate subsidy for any farmer
+4. **Fraud Report** - See what the fraud detection caught
+5. **Audit Log** - Check the history of all changes
+6. **Export Data** - Export farmers/trees to CSV
 
-### 4. Tree Analysis
-- Click "🌳 View Trees"
-- See 350+ trees across all farmers
-- Filter by status: ACTIVE, INACTIVE, DEAD, TRANSPLANTED
-- Sort by plant date to see plantation timeline
+## Demo Data
 
-## Database Queries (MySQL)
+The database comes preloaded with:
+- 20 farmers (IDs 101-120)
+- 100+ tree records
+- 20 subsidy records
+- Real audit logs showing changes
 
-### Total Subsidy Amount
-```sql
-SELECT SUM(eligible_amount) FROM Subsidy;
--- Result: ~₹15,00,000 - ₹18,00,000
-```
+Try searching for any farmer from 101-120.
 
-### Farmers by Village
-```sql
-SELECT village, COUNT(*) FROM Farmer GROUP BY village;
-```
+## Troubleshooting
 
-### Subsidy Status Distribution
-```sql
-SELECT status, COUNT(*) FROM Subsidy GROUP BY status;
-```
+**"Database connection failed"**
+- Check if MySQL is running
+- Verify credentials in DBConnection.java
 
-### Recent Activity
-```sql
+**"Compilation error"**
+- Use UTF-8 encoding: `javac -encoding UTF-8`
+- Make sure you're in the src/ folder
+
+**"No data showing"**
+- Make sure database_schema.sql was executed
+- Check MySQL for the greenledger database
+
+**"Can't find classes"**
+- Verify mysql-connector.jar is in lib/ folder
+- Check the -cp path in compilation/run commands
+
+## Next Steps
+
+- Read SETUP_GUIDE.md for more detailed info
+- Check out the actual Java code to see how it works
+- Try adding a new farmer or tree record
+- Explore the fraud report feature
+
 SELECT * FROM AuditLog ORDER BY action_timestamp DESC LIMIT 10;
 ```
 

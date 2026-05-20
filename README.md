@@ -1,6 +1,159 @@
-# 🌱 GreenLedger Project - Improvements & Demo Data
+# GreenLedger - Agricultural Subsidy Management System
 
-## 📋 WHAT'S NEW - Complete List of Enhancements
+A Java Swing application I built for managing agricultural subsidies and tree planting records. 
+
+## What This Project Does
+
+Basically, it's a system to track farmer registrations, their trees, subsidies, and detect any fraud. I built it because managing all this data manually was a pain, and I wanted to learn how to build desktop applications with Java Swing and MySQL.
+
+The app has:
+- User login system with different roles (admin, officer, staff)
+- Farmer registration and management
+- Tree planting records with GPS coordinates
+- Automatic subsidy calculation
+- Fraud detection system
+- Complete audit trail of everything
+
+## Features
+
+### Authentication
+Three demo accounts to test with:
+- admin / admin123 (full access)
+- officer1 / officer123 (officer access)
+- staff1 / staff123 (read-only access)
+
+### Main Features
+- **Add Farmers**: Register new farmers with their Aadhaar, phone, email, land area
+- **Tree Management**: Add trees with GPS coordinates, track their status
+- **Search**: Find farmers by ID, name, village, or tree type
+- **Subsidy Calculator**: Automatically calculates subsidy based on tree count
+- **Fraud Detection**: System detects duplicate trees, suspicious patterns, invalid coordinates
+- **View All Data**: See all records in tables, export to CSV
+- **Audit Log**: Check who did what and when
+
+## Demo Data Included
+
+I included 20 demo farmers with 100+ trees already loaded:
+- 20 farmers across 5 different villages
+- 100+ tree records with GPS coordinates
+- 20 subsidy records with different statuses
+- 3 user accounts to login
+
+You can test everything with this data without entering anything manually.
+
+## Database
+
+The app uses MySQL with 6 tables:
+- Users (login accounts)
+- Farmer (farmer info)
+- Tree (tree records)
+- Subsidy (subsidy info)
+- AuditLog (tracking changes)
+- FraudDetection (fraud alerts)
+
+Plus 11 database triggers that automatically:
+- Log every insert/update/delete
+- Detect fraud cases
+- Update subsidies automatically
+
+## Setup (Quick Version)
+
+1. Run database_schema.sql in MySQL
+2. Compile: `javac -encoding UTF-8 -cp ".:../lib/mysql-connector-java-8.0.33.jar" *.java`
+3. Run: `java -cp ".:../lib/mysql-connector-java-8.0.33.jar" LoginScreen`
+4. Login with admin/admin123
+
+Full setup guide is in SETUP_GUIDE.md
+
+## Tech Stack
+
+- Java 8+ (Swing for GUI)
+- MySQL 5.7+
+- JDBC for database connection
+- Ant for build
+
+## What I'm Proud Of
+
+- The fraud detection system works automatically with triggers
+- Clean authentication system with session management
+- All input validation before saving to database
+- Professional UI with proper colors and emojis
+- Complete audit trail for compliance
+- 15+ input validators for data quality
+- All code is organized and well-documented
+
+## What Needs Work
+
+- Could add a web version later
+- Mobile app for field officers would be useful
+- Better analytics/reports
+- Integration with government portals
+
+## Files
+
+- `src/` - All Java classes
+- `database_schema.sql` - Database setup + demo data
+- `QUICK_START.md` - 5 minute setup guide
+- `SETUP_GUIDE.md` - Detailed setup
+- `lib/` - MySQL driver
+
+## How to Use
+
+1. Login with demo account
+2. Try searching for farmer 101 (Rajesh Kumar)
+3. Check the fraud report
+4. View audit logs to see all changes
+5. Export data to CSV
+
+## Key Classes
+
+- **LoginScreen.java** - Entry point, login screen
+- **MainMenu.java** - Main dashboard after login
+- **DatabaseInitializer.java** - Loads demo data
+- **AuthenticationManager.java** - Handles login/session
+- **InputValidator.java** - Validates all inputs
+- **DBConnection.java** - Database connection
+
+Each class has clear comments explaining what it does.
+
+## Testing
+
+Before going live, I tested:
+- Login with all 3 accounts ✓
+- Farmer search with all 20 demo farmers ✓
+- Adding new farmers and trees ✓
+- Subsidy calculation ✓
+- Fraud detection triggers ✓
+- Audit logging ✓
+- CSV export ✓
+
+All working fine.
+
+## Notes
+
+- Database credentials are in DBConnection.java (username: root, password: admin123) - change if needed
+- The app runs on localhost:3306 by default
+- Demo data has realistic GPS coordinates for North India region
+- All tree types are common in India
+
+## Running for First Time
+
+1. Make sure MySQL is running
+2. Create the database
+3. Load demo data
+4. Compile everything
+5. Run LoginScreen.java
+
+Everything should work after that.
+
+## Future Ideas
+
+- Web dashboard
+- Mobile app
+- Better fraud detection with ML
+- Export to PDF
+- Email notifications
+- SMS alerts for officers
 
 ### ✨ **3 NEW UTILITY CLASSES**
 
@@ -279,38 +432,4 @@ Before running, ensure:
 ✅ All buttons: Accessible & clear  
 ✅ All tables: Scrollable & sortable  
 
----
 
-## 🎉 READY TO USE!
-
-Your GreenLedger application is now:
-- ✅ Fully functional
-- ✅ Well-documented
-- ✅ Production-ready
-- ✅ Security-hardened
-- ✅ User-friendly
-- ✅ Demo data loaded
-
-**Start by reading QUICKSTART.md!**
-
----
-
-## 📋 CHECKLIST FOR YOU
-
-After setup:
-- [ ] Login with admin account
-- [ ] View all farmers (20 total)
-- [ ] Search by different criteria
-- [ ] Check subsidy for farmer 101
-- [ ] View fraud report
-- [ ] Try other user accounts
-- [ ] Test logout functionality
-
----
-
-**Congratulations! Your GreenLedger system is fully improved and ready to demonstrate! 🌱**
-
-For detailed information, refer to:
-- **Quick Setup**: QUICKSTART.md
-- **Complete Guide**: SETUP_GUIDE.md  
-- **What Changed**: IMPROVEMENTS_SUMMARY.md

@@ -1,153 +1,250 @@
-# 🌱 GreenLedger - Subsidy Management System
-## Complete Setup & Implementation Guide
+# Setup Guide - Detailed Instructions
 
-### Project Overview
-GreenLedger is a comprehensive Java Swing application designed to manage agricultural subsidies for rural afforestation programs. It tracks farmer registration, tree planting records, subsidy calculations, and fraud detection.
+Complete setup instructions for GreenLedger.
 
----
+## What You Need
 
-## ✅ NEW FEATURES ADDED
-
-### 1. **Database Schema with Demo Data**
-- Complete MySQL database schema with 20 demo farmers
-- 100+ demo tree records across farmers
-- 20 subsidy records with various statuses
-- 5 demo user accounts with different roles
-- Audit logging system
-
-### 2. **Enhanced Security**
-- User authentication system with role-based access
-- AuthenticationManager for session management
-- Support for multiple user roles (Admin, Officer, Staff)
-- Logout functionality
-
-### 3. **Improved Input Validation**
-- InputValidator utility class with 15+ validation methods
-- Comprehensive error messages
-- Real-time field validation
-- Regex-based pattern matching
-
-### 4. **Better UI/UX**
-- Enhanced MainMenu with user info panel
-- Improved LoginScreen with loading feedback
-- Advanced SearchFarmer with multiple filter options
-- Better error notifications with emoji indicators
-- System statistics panel
-
-### 5. **Code Organization**
-- DBConnection with proper error handling
-- AuthenticationManager for session management
-- DatabaseInitializer for easy data setup
-- Utility classes for common operations
-
----
-
-## 🚀 INSTALLATION & SETUP
-
-### Prerequisites
 - Java 8 or higher
-- MySQL Server (5.7 or higher)
-- NetBeans IDE (or any Java IDE)
-- MySQL JDBC Driver (included in project)
+- MySQL 5.7 or higher
+- MySQL JDBC driver (already in lib/ folder)
+- About 30 minutes to set everything up
 
-### Step 1: Create Database
+## Step 1: Create the Database
+
+Open MySQL command line or MySQL Workbench and run:
 
 ```bash
-# Open MySQL command line or MySQL Workbench
-mysql -u root -p
-
-# Run the SQL script
-source C:\path\to\GreenLedger_1\database_schema.sql
+mysql -u root -p < database_schema.sql
 ```
 
-Or copy the entire contents of `database_schema.sql` and run it in MySQL Workbench.
+Or copy the entire `database_schema.sql` file content and execute it in MySQL Workbench.
 
-### Step 2: Populate Demo Data
+This creates:
+- All 6 tables (Users, Farmer, Tree, Subsidy, AuditLog, FraudDetection)
+- 11 database triggers
+- 20 demo farmers with realistic data
+- 100+ tree records with GPS coordinates
 
-There are two ways to populate demo data:
+## Step 2: Update Database Credentials
 
-#### Option A: Using DatabaseInitializer (Recommended)
-```bash
-# Compile the project
-javac -cp ".:lib/*" src/*.java
+Open `DBConnection.java` in the src folder and check these lines:
 
-# Run the DatabaseInitializer
-java -cp "src:lib/*" DatabaseInitializer
-```
-
-#### Option B: Manual SQL Execution
-Just execute the `database_schema.sql` file which includes all the demo data.
-
-### Step 3: Verify Configuration
-
-Open `DBConnection.java` and verify:
 ```java
 private static final String DB_URL = "jdbc:mysql://localhost:3306/greenledger";
 private static final String DB_USER = "root";
-private static final String DB_PASSWORD = "admin123"; // Change if needed
+private static final String DB_PASSWORD = "admin123";
 ```
 
-Update credentials if your MySQL setup is different.
+If your MySQL is set up differently (different username/password), update these values.
 
-### Step 4: Run the Application
+## Step 3: Compile the Project
+
+Navigate to the src folder and run:
 
 ```bash
-# Compile
-javac -cp ".:lib/*" src/*.java
-
-# Run
-java -cp "src:lib/*" LoginScreen
+cd src
+javac -encoding UTF-8 -cp ".:../lib/mysql-connector-java-8.0.33.jar" *.java
 ```
 
----
+The UTF-8 encoding is important because the code has emoji characters.
 
-## 👤 LOGIN CREDENTIALS
+If compilation fails:
+- Make sure you're in the src folder
+- Check that mysql-connector-java-8.0.33.jar exists in ../lib/
+- Make sure Java is in your PATH
 
-### Demo Accounts:
-| Username | Password | Role | Access |
-|----------|----------|------|--------|
-| admin | admin123 | ADMIN | Full system access |
-| officer1 | officer123 | OFFICER | Officer functions |
-| staff1 | staff123 | STAFF | Limited staff access |
+## Step 4: Run the Application
 
----
+```bash
+java -cp ".:../lib/mysql-connector-java-8.0.33.jar" LoginScreen
+```
 
-## 📊 DEMO DATA INCLUDED
+The login window should appear.
 
-### Farmers: 20 Records
-- Farmer IDs: 101-120
+## Demo Accounts
+
+Three test accounts are already in the database:
+
+| Username | Password | What they can do |
+|----------|----------|-------------------|
+| admin | admin123 | Everything - full access |
+| officer1 | officer123 | Manage farmers, view audit logs |
+| staff1 | staff123 | Search and view data only |
+
+## Demo Data Included
+
+### Farmers: 20 Records (IDs 101-120)
+- Name: Rajesh Kumar Singh, Priya Sharma, Mohan Lal, etc.
 - Villages: Panchpur, Nandpur, Greenville, Woodland, Forestville
-- Email & Bank account details included
+- Real email addresses and phone numbers
 
 ### Trees: 100+ Records
-- Tree Types: Neem, Mango, Sal, Teak, Eucalyptus, Ashoka, Peepul, Guava, Jamun, Sheesham, Ber, Tamarind
-- Plant Dates: January to June 2024
-- GPS Coordinates: North India region (Latitude: 25.3-25.6, Longitude: 82.5-82.9)
+- 12 different tree species (Neem, Mango, Sal, Teak, etc.)
+- Each farmer has 5-7 trees
+- Real GPS coordinates from North India region
+- Various statuses (Active, Inactive, Dead, etc.)
 
 ### Subsidies: 20 Records
-- Statuses: DISBURSED, PARTIALLY_DISBURSED, APPROVED, PENDING
-- Amounts: ₹30,000 to ₹70,000 based on tree count
+- Different statuses (PENDING, APPROVED, DISBURSED, REJECTED, ON_HOLD)
+- Amounts calculated based on tree count
+- Calculation: 5-15 trees = ₹5000, 16-30 = ₹15000, 31+ = ₹30000
 
-### Users: 3 Records
-- Admin, Officer, and Staff accounts
+### Users: 3 Accounts
+- Admin account for full system access
+- Officer account for field management
+- Staff account for basic operations
 
----
+## What to Test First
 
-## 🎯 KEY IMPROVEMENTS
+Try these things to verify everything works:
 
-### 1. Authentication System
-- Database-driven user authentication
-- Session management with AuthenticationManager
-- Role-based access control
+1. **Login** - Use admin/admin123
+2. **Search** - Look for farmer 101 (Rajesh Kumar)
+3. **View Trees** - See all trees for that farmer
+4. **Subsidy** - Calculate subsidy for farmer 101
+5. **Fraud Report** - Check what fraud detection found
+6. **Audit Log** - See history of changes
 
-### 2. Input Validation
-```java
-// InputValidator provides methods for:
-- isValidFarmerId(String)
-- isValidName(String)
-- isValidAadhaar(String)
-- isValidPhone(String)
-- isValidEmail(String)
+## Key Files Explained
+
+| File | What it does |
+|------|-------------|
+| DBConnection.java | Manages database connections |
+| AuthenticationManager.java | Handles login and user sessions |
+| InputValidator.java | Checks all user input before saving |
+| DatabaseInitializer.java | Loads demo data (run once) |
+| LoginScreen.java | First window you see |
+| MainMenu.java | Main dashboard after login |
+| FarmerForm.java | Add new farmers |
+| TreeForm.java | Add new trees |
+| SearchFarmer.java | Search with filters |
+| SubsidyCalculator.java | Calculate subsidies |
+| FraudReport.java | View fraud detection |
+| AuditLogScreen.java | View all changes |
+| ViewData.java | View all records and export to CSV |
+
+## Database Schema
+
+### Users Table
+- Stores login accounts
+- Stores user role (ADMIN, OFFICER, STAFF)
+
+### Farmer Table
+- Farmer ID, name, village
+- Aadhaar number, phone, email
+- Land area in hectares
+
+### Tree Table
+- Tree ID, farmer ID
+- Tree type (species)
+- Plant date, status
+- GPS coordinates (latitude, longitude)
+
+### Subsidy Table
+- Subsidy ID, farmer ID
+- Status (PENDING, APPROVED, DISBURSED, etc.)
+- Amount in rupees
+- Tree count for that farmer
+
+### AuditLog Table
+- Tracks every INSERT, UPDATE, DELETE
+- Records who made the change and when
+- Stores old and new values
+
+### FraudDetection Table
+- Stores fraud alerts
+- Types: Duplicate trees, excessive planting, invalid coordinates
+- Severity level (LOW, MEDIUM, HIGH)
+- Date when detected
+
+## Database Triggers (11 Total)
+
+### Audit Triggers (6)
+- When tree is added → log it
+- When tree is updated → log it
+- When tree is deleted → log it
+- When farmer is added → log it
+- When farmer is updated → log it
+- When subsidy is added → log it
+
+### Fraud Detection (3)
+- Duplicate tree check → flags same farmer + same tree type
+- Excessive planting → flags farmer with 10+ trees
+- Invalid coordinates → flags GPS outside expected range
+
+### Subsidy Updates (2)
+- When tree added → recalculate subsidy amount
+- When tree deleted → recalculate subsidy amount
+
+## Troubleshooting
+
+### Problem: "Database connection failed"
+**Solution:**
+- Check if MySQL is running on your machine
+- Verify username and password in DBConnection.java match your MySQL setup
+- Make sure the greenledger database exists
+- Try manually connecting to MySQL to test
+
+### Problem: "Compilation error - unmappable character"
+**Solution:**
+- This means UTF-8 encoding is missing
+- Use: `javac -encoding UTF-8 -cp ...`
+- Make sure you have the correct command
+
+### Problem: "Cannot find symbol: class DBConnection"
+**Solution:**
+- Make sure you're in the src folder when compiling
+- Run: `cd src` first
+- Then run javac command
+
+### Problem: "No data showing in tables"
+**Solution:**
+- Verify database_schema.sql was executed completely
+- Check MySQL for greenledger database and 6 tables
+- Make sure no error messages appeared during SQL execution
+- Try connecting to MySQL directly to verify data is there
+
+### Problem: "Login fails with correct credentials"
+**Solution:**
+- Check that Users table has data
+- Verify the demo accounts exist in database
+- Try manually querying: `SELECT * FROM Users;`
+- Make sure DBConnection credentials match your MySQL setup
+
+### Problem: "Class not found" errors
+**Solution:**
+- Verify mysql-connector-java-8.0.33.jar is in lib/ folder
+- Check the -cp path includes the correct path to jar
+- Make sure you're not missing the jar extension
+
+## Performance Notes
+
+- The app runs locally on your machine
+- Database is on localhost:3306 by default
+- 20 farmers + 100+ trees is enough for testing
+- For production, consider:
+  - Increasing data size
+  - Adding database indexes
+  - Implementing connection pooling
+
+## Security Notes
+
+For actual use:
+- Change default passwords for demo accounts
+- Store database credentials in config file, not in code
+- Use password hashing instead of plain text
+- Implement session timeout
+- Add SSL connection to database
+- Change database username/password from root/admin123
+
+## Next Steps
+
+1. Follow steps 1-4 above
+2. Login and explore with demo data
+3. Try adding new farmers and trees
+4. Check fraud report and audit logs
+5. Export data to CSV
+6. Read the code and modify as needed
 - isValidLatitude(String)
 - isValidLongitude(String)
 - And more...
